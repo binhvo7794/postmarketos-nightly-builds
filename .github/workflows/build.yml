@@ -2,11 +2,6 @@ name: Build images
 on:
   push:
   workflow_dispatch:
-  schedule:
-    - cron: '0 0 * * 5' # Run every friday at midnight
-
-env:
-  KERNEL_BRANCH: 6.12.1
 
 jobs:
   build-image:
@@ -34,45 +29,18 @@ jobs:
         run: |
           echo -e '\n\nedge\nfairphone\nfp4\n\n\nphosh\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n' | pmbootstrap init || true
           cd ~/.local/var/pmbootstrap/cache_git/pmaports
-          git remote add 99degree https://github.com/99degree/pmaports.git
-          DEFAULT_BRANCH=$(git remote show sm7125 | awk '/HEAD branch/ {print $NF}')
-          git fetch 99degree $DEFAULT_BRANCH
-          #git reset --hard 99degree/$DEFAULT_BRANCH
-          git checkout 99degree/next -- main/adbd-linux
-
-      - name: Check kernel branch
-        if: matrix.version == 'default'
-        run: |
-          DEFAULT_BRANCH=$(curl -s  https://api.github.com/repos/sm7125-mainline/linux | jq -r '.default_branch')
-          echo "Default branch is $DEFAULT_BRANCH"
-          echo "KERNEL_BRANCH=$DEFAULT_BRANCH" >> $GITHUB_ENV
-
-      - name: Clone kernel sources
-        run: |
-          #git clone https://github.com/sm7125-mainline/linux.git --single-branch --branch ${{ env.KERNEL_BRANCH }} --depth 1 ./linux
 
       - name: Choose any SM7125 device in pmbootstrap to build kernel
         run: |
-          cp xiaomi-miatoll.cfg ~/.config/pmbootstrap_v3.cfg
-
-      - name: Compile kernel with envkernel
-        run: |
-          #cd linux
-          #shopt -s expand_aliases
-          #source ../pmbootstrap/helpers/envkernel.sh
-          #make defconfig sm7125.config
-          #make -j$(nproc)
-          #pmbootstrap build --envkernel linux-postmarketos-qcom-sm7125
+          cp xiaomi-lavender.cfg ~/.config/pmbootstrap_v3.cfg
 
       - name: Create artifact directory
         run: |
           mkdir out
 
-      - name: Build xiaomi-curtana
+      - name: Build xiaomi-lavender
         run: |
-          cp xiaomi-miatoll.cfg ~/.config/pmbootstrap_v3.cfg
-          pmbootstrap build adbd-linux
-          pmbootstrap config extra_packages adbd-linux
+          cp xiaomi-lavender.cfg ~/.config/pmbootstrap_v3.cfg
           pmbootstrap install --password 147147 --split
           pmbootstrap export
           ls /tmp/postmarketOS-export/ -la

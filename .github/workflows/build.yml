@@ -41,7 +41,7 @@ jobs:
       - name: Build xiaomi-lavender
         run: |
           cp xiaomi-lavender.cfg ~/.config/pmbootstrap_v3.cfg
-          pmbootstrap install --password 147147 --split
+          pmbootstrap install --password 147147
           pmbootstrap export
           ls /tmp/postmarketOS-export/ -la
           cp /tmp/postmarketOS-export/boot.img out/boot-xiaomi-tianma-lavender.img
@@ -62,5 +62,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: xiaomi-lavender
-          path: out/*-lavender*.img*
+          path: out/*lavender*.img*
           retention-days: 7

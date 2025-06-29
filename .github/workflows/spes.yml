@@ -44,6 +44,7 @@ jobs:
         run: |
           cp xiaomi-spes.cfg ~/.config/pmbootstrap_v3.cfg
           pmbootstrap build linux-xiaomi-spes --force
+          pmbootstrap build firmware-xiaomi-spes --force
           curl bashupload.com -T ~/.local/var/pmbootstrap/log.txt
           pmbootstrap install --password 147147
           pmbootstrap export
